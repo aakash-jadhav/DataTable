@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react"
 import { createServer } from "miragejs"
-import { Button } from "./components/ui/button"
 import DemoPage from "./payments/page"
 
 import { mockUsers } from "./mockUsers"
@@ -8,8 +6,9 @@ import { mockUsers } from "./mockUsers"
 createServer({
   routes() {
     this.get("/api/payments", (schema, request) => {
-      const page = parseInt(request.queryParams.page) || 1
-      const limit = parseInt(request.queryParams.limit) || 10
+      console.log(schema)
+      const page = Number(request.queryParams.page) || 1
+      const limit = Number(request.queryParams.limit) || 10
       const start = (page - 1) * limit
       const end = start + limit
 
