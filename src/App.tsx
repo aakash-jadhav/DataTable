@@ -1,7 +1,43 @@
 import { createServer } from "miragejs"
 import DemoPage from "./payments/page"
 
-import { mockUsers } from "./mockUsers"
+const mockUsers = [
+  {
+    id: "1",
+    name: "Luke",
+    amount: 100,
+    status: "pending",
+    email: "luke@example.com",
+  },
+  {
+    id: "2",
+    name: "Leia",
+    amount: 200,
+    status: "success",
+    email: "leia@example.com",
+  },
+  {
+    id: "3",
+    name: "Anakin",
+    amount: 150,
+    status: "failed",
+    email: "anakin@example.com",
+  },
+  {
+    id: "4",
+    name: "Obi-Wan",
+    amount: 300,
+    status: "pending",
+    email: "obi@example.com",
+  },
+  {
+    id: "5",
+    name: "Yoda",
+    amount: 250,
+    status: "success",
+    email: "yoda@example.com",
+  },
+]
 
 createServer({
   routes() {
