@@ -1,44 +1,34 @@
 import { useState, useEffect } from "react"
-
 import { createServer } from "miragejs"
 import { Button } from "./components/ui/button"
 import DemoPage from "./payments/page"
 
+import { mockUsers } from "./mockUsers"
+
 createServer({
   routes() {
-    this.get("/api/users", () => [
-      { id: "1", name: "Luke" },
-      { id: "2", name: "Leia" },
-      { id: "3", name: "Anakin" },
-    ])
+    this.get("/api/payments", (schema, request) => {
+      const page = parseInt(request.queryParams.page) || 1
+      const limit = parseInt(request.queryParams.limit) || 10
+      const start = (page - 1) * limit
+      const end = start + limit
+
+      const paginatedData = mockUsers.slice(start, end)
+
+      return {
+        data: paginatedData,
+        total: mockUsers.length,
+      }
+    })
   },
 })
 
 export default function App() {
-  let [users, setUsers] = useState<{ id: number; name: string }[]>([])
-
-  useEffect(() => {
-    fetch("/api/users")
-      .then(response => response.json())
-      .then(json => setUsers(json))
-  }, [])
-
   return (
     <div className="m-2">
       <p>Welcome to mirage</p>
-      <ul className="">
-        {users.map(user => (
-          <li key={user.id} className="border-b-2 p-3 border-gray-200 max-w-sm">
-            {user.name}
-          </li>
-        ))}
-      </ul>
-      <br />
-      <Button variant="default" className="cursor-pointer">
-        Request Data
-      </Button>
 
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto p-10">
         <DemoPage />
       </div>
     </div>
