@@ -29,14 +29,25 @@ import {
 import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  apiEndpoint: string // Add endpoint prop
+interface YourDataType {
+  id: string // Assuming each row has a unique ID
+  name: string
+  amount: string
+  status: string
+  email: string
+  // ... other properties
 }
 
-export function DataTable<TData, TValue>({
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  apiEndpoint: string
+  onDataUpdate?: (updatedData: TData[]) => void // Optional callback for updated data
+}
+
+export function DataTable<TData extends YourDataType, TValue>({
   columns,
   apiEndpoint,
+  onDataUpdate,
 }: DataTableProps<TData, TValue>) {
   const [data, setData] = useState<TData[]>([])
   const [loading, setLoading] = useState(false)
@@ -69,7 +80,31 @@ export function DataTable<TData, TValue>({
 
   useEffect(() => {
     fetchData()
-  }, [pagination.pageIndex, pagination.pageSize])
+  }, [pagination.pageIndex, pagination.pageSize, apiEndpoint]) // Include apiEndpoint in dependency array
+
+  const updateData = (
+    rowIndex: number,
+    columnId: keyof TData,
+    value: unknown
+  ) => {
+    setData(old =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...row,
+            [columnId]: value,
+          }
+        }
+        return row
+      })
+    )
+  }
+
+  useEffect(() => {
+    if (onDataUpdate) {
+      onDataUpdate(data) // Call the callback whenever data changes
+    }
+  }, [data, onDataUpdate])
 
   const table = useReactTable({
     data,
@@ -80,7 +115,10 @@ export function DataTable<TData, TValue>({
       pagination,
     },
     onPaginationChange: setPagination,
-    manualPagination: true, // Important: tells table we're handling pagination
+    manualPagination: false,
+    meta: {
+      updateData, // Pass the updateData function to the table meta
+    },
   })
 
   return (
@@ -89,11 +127,12 @@ export function DataTable<TData, TValue>({
         className="my-3 cursor-pointer"
         onClick={() => {
           const newRow: TData = {
-            name: "aakash",
-            amount: "123",
+            id: Math.random().toString(36).substring(7), // Generate a temporary ID
+            name: "",
+            amount: "",
             status: "",
             email: "",
-          } as TData // Or provide default values if needed
+          } as TData
           setData(prev => [newRow, ...prev])
         }}
       >
