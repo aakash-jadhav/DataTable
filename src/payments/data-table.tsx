@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useState, useEffect } from "react"
+import { Input } from "@/components/ui/input"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -84,6 +85,20 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <Button
+        className="my-3 cursor-pointer"
+        onClick={() => {
+          const newRow: TData = {
+            name: "aakash",
+            amount: "123",
+            status: "",
+            email: "",
+          } as TData // Or provide default values if needed
+          setData(prev => [newRow, ...prev])
+        }}
+      >
+        Add new
+      </Button>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
