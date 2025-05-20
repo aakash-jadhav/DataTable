@@ -1,6 +1,6 @@
 // payments/columns.ts
 
-import { ColumnDef, TableMeta } from "@tanstack/react-table" // Import TableMeta
+import { ColumnDef } from "@tanstack/react-table" // Import TableMeta
 import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react"
 

@@ -27,7 +27,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
 
 interface YourDataType {
   id: string // Assuming each row has a unique ID

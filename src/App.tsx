@@ -1,7 +1,5 @@
 import { createServer } from "miragejs"
-import DemoPage from "./payments/page"
 import EDataTable from "./payments/EDataTable"
-import { columns } from "./payments/columns"
 import { mockUsers } from "./mockUsers"
 
 createServer({
